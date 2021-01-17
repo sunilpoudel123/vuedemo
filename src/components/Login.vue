@@ -2,12 +2,16 @@
   <div id="login">
     <h1>Login</h1>
     <div class="form-inputs">
-      <v-text-field label="Username" type="text" id="username" name="username" v-model="input.username" placeholder="Phone Number" />
+      <v-text-field label="Phone Number" type="text" id="username" name="username" v-model="input.username" placeholder="Phone Number" />
     </div>
     <div class="form-inputs">
       <v-text-field label="Password" type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
     </div>
     <v-btn type="button" v-on:click="login()">Login</v-btn>
+    <p class="forgot-password text-right">
+      Already have an account
+      <router-link to="/register">Register</router-link>
+    </p>
   </div>
 </template>
 
@@ -29,7 +33,7 @@ export default {
     login() {
       if(this.input.username != "" && this.input.password != "") {
         // This should actually be an api call not a check against this.$parent.mockAccount
-        const url = "http://localhost:8080" //give suitable appi url
+        const url = "http://localhost:8090/auth/authenticate" //give suitable appi url
         axios({
           method: 'post',
           url: url,
@@ -37,7 +41,7 @@ export default {
         }).then((response) => {
           console.log("Got response from server");
           console.log(response)
-          if(response.body.success){
+          if(response.data.code=='0'){
             this.goToMainPage();
           } else {
             this.goToRegisterPage();

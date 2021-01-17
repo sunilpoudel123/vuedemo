@@ -1,35 +1,26 @@
 <template>
-  <div class="vue-tempalte">
+  <div class="vue-template">
     <form>
-      <h3>Sign Up</h3>
+      <h3>Register Up</h3>
 
-      <div class="form-group">
-        <label>Full Name</label>
-        <input type="text" class="form-control form-control-lg"/>
+      <div class="form-inputs">
+        <v-text-field label="Phone Number" type="text" id="phoneNumber" name="phoneNumber" v-model="input.username" placeholder="Phone Number" />
       </div>
 
-      <div class="form-group">
-        <label>Email address</label>
-        <input type="email" class="form-control form-control-lg" />
+      <div class="form-inputs">
+        <v-text-field label="SMS Code" type="text" id="smscode" name="smscode" v-model="input.smscode" placeholder="SMS code" />
       </div>
 
-      <div class="form-group">
-        <label>Password</label>
-        <input type="password" class="form-control form-control-lg" />
+      <div class="form-inputs">
+        <v-text-field label="Password" type="text" id="password" name="password" v-model="input.password" placeholder="Password" />
       </div>
-
-      <div class="form-group">
-        <label>Repeat Password</label>
-        <input type="password" class="form-control form-control-lg" />
+<!--      <div class="form-inputs">-->
+<!--        <v-text-field label="Repeat Password" type="text" id="password" name="password" v-model="input.password" placeholder="Repeat Password" />-->
+<!--      </div>-->
+      <div class="form-inputs">
+        <v-text-field label="Invitation Code" type="text" id="invitationCode" name="invitationCode" v-model="input.invitationCode" placeholder="Invitation Code" />
       </div>
-
-      <div class="form-group">
-        <label>Invitation Code</label>
-        <input type="password" class="form-control form-control-lg" />
-      </div>
-
-      <button type="submit" class="btn btn-dark btn-lg btn-block">Register</button>
-
+      <v-btn type="button" v-on:click="register()">Register</v-btn>
       <p class="forgot-password text-right">
         Already have an account
         <router-link to="/login">sign in?</router-link>
@@ -40,9 +31,51 @@
 
 <script>
 
+import axios from "axios";
+import Home from "@/components/Home";
+import Login from "@/components/Login";
+
 export default {
   data() {
-    return {}
+    return {
+      input: {
+        phoneNumber: "",
+        password: ""
+      }
+    }
+  },
+  methods: {
+    register() {
+      if(this.input.username != "" && this.input.password != "") {
+        // This should actually be an api call not a check against this.$parent.mockAccount
+        const url = "http://localhost:8090/auth/register" //give suitable appi url
+        axios({
+          method: 'post',
+          url: url,
+          data: this.input
+        }).then((response) => {
+          console.log("Got response from server");
+          console.log(response)
+          if(response.data.code=='0'){
+            this.goToMainPage();
+          } else {
+            this.goToLoginPage();
+          }
+        })
+      } else {
+        console.log("A Phone Number and password must be present");
+      }
+    },
+    goToMainPage(){
+      this.routeToPage('/home', Home);
+    },
+    goToLoginPage(){
+      this.routeToPage('/login', Login);
+    },
+    routeToPage(path, component){
+      this.$router.push({ path: path, component:component })
+    }
   }
+
 }
 </script>
