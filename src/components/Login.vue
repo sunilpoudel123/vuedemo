@@ -12,6 +12,9 @@
 </template>
 
 <script>
+import axios from 'axios';
+import Home from "@/components/Home";
+import Register from "@/components/Register";
 export default {
   name: 'Login',
   data() {
@@ -26,15 +29,32 @@ export default {
     login() {
       if(this.input.username != "" && this.input.password != "") {
         // This should actually be an api call not a check against this.$parent.mockAccount
-        if(this.input.username == this.$parent.mockAccount.username && this.input.password == this.$parent.mockAccount.password) {
-          this.$emit("authenticated", true);
-          this.$router.replace({ name: "Secure" });
-        } else {
-          console.log("The username and / or password is incorrect");
-        }
+        const url = "http://localhost:8080" //give suitable appi url
+        axios({
+          method: 'post',
+          url: url,
+          data: this.input
+        }).then((response) => {
+          console.log("Got response from server");
+          console.log(response)
+          if(response.body.success){
+            this.goToMainPage();
+          } else {
+            this.goToRegisterPage();
+          }
+        })
       } else {
         console.log("A Phone Number and password must be present");
       }
+    },
+    goToMainPage(){
+      this.routeToPage('/home', Home);
+    },
+    goToRegisterPage(){
+      this.routeToPage('/register', Register);
+    },
+    routeToPage(path, component){
+      this.$router.push({ path: path, component:component })
     }
   }
 }
