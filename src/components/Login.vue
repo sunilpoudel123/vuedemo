@@ -1,17 +1,42 @@
 <template>
-  <div id="login">
-    <h1>Login</h1>
-    <div class="form-inputs">
-      <v-text-field label="Phone Number" type="text" id="username" name="username" v-model="input.username" placeholder="Phone Number" />
+  <div>
+    <v-toolbar
+        dark
+        prominent
+        src="https://cdn.vuetifyjs.com/images/backgrounds/vbanner.jpg">
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-toolbar-title></v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn icon>
+        <v-icon>mdi-export</v-icon>
+      </v-btn>
+    </v-toolbar>
+    <div class="hero-body">
+      <div class="container">
+        <div id="login">
+          <span class="red--text"><h1>Login</h1></span>
+          <v-row>
+            <v-col cols="4" class="d-flex child-flex">
+              <div class="form-inputs">
+                <v-text-field label="Phone Number" type="text" id="username" name="username" v-model="input.username" placeholder="Phone Number" />
+              </div>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="4" class="d-flex child-flex">
+              <div class="form-inputs">
+                <v-text-field label="Password" type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
+              </div>
+            </v-col>
+          </v-row>
+          <v-btn type="button" v-on:click="login()">Login</v-btn>
+          <p class="forgot-password text-right">
+            No account yet
+            <router-link to="/register">Register</router-link>
+          </p>
+        </div>
+      </div>
     </div>
-    <div class="form-inputs">
-      <v-text-field label="Password" type="password" id="password" name="password" v-model="input.password" placeholder="Password" />
-    </div>
-    <v-btn type="button" v-on:click="login()">Login</v-btn>
-    <p class="forgot-password text-right">
-      Already have an account
-      <router-link to="/register">Register</router-link>
-    </p>
   </div>
 </template>
 
